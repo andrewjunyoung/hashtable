@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "spt_linkedlist_node.h"
 
 spt_linkedlist_node *spt_linkedlist_node_init(str_ptr_tuple *tuple) {
@@ -48,13 +49,19 @@ bool spt_linkedlist_node_has_next(spt_linkedlist_node *node) {
 }
 
 bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *next) {
-    if (!curr) return false;
+    if (!curr) {
+        fprintf(stderr, "Error: attempted to set next in a null spt_linkedlist_node. Returning false.");
+        return false;
+    }
     curr->next = next;
     return true;
 }
 
 bool spt_linkedlist_node_set_tuple(spt_linkedlist_node *node, str_ptr_tuple *tuple) {
-    if (!node) return false;
+    if (!node) {
+        fprintf(stderr, "Error: attempted to set tuple in a null spt_linkedlist_node. Returning false.");
+        return false;
+    }
     node->tuple = tuple;
     return true;
 }

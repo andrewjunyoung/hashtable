@@ -1,13 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "hashtable.h"
 
 void *hashtable_get_value(hashtable *table, char *key);
 
 unsigned long _hashtable_get_hash(char *str) {
-    // TODO How to check for and deal with collisions?
-    
     unsigned long hash = 5381;
     int c;
 
+    // Repeat this strlen(str) number of times
     while (c = *str++) {
         // hash * 33 + c
         hash = ((hash << 5) + hash) + c;
@@ -17,14 +20,13 @@ unsigned long _hashtable_get_hash(char *str) {
 }
 
 hashtable *hashtable_init(uint16_t capacity, bool is_dynamic) {
-
     if (capacity == 0) {
-        fprintf(stderr, "Error: Cannot initialize hashtable of capacity zero. ");
+        fprintf(stderr, "Error: Cannot initialize hashtable of capacity zero.");
         return NULL;
     }
 
-    // Make the hashtable
     hashtable* table = malloc(sizeof(table));
+
     table->is_dynamic = is_dynamic;
     table->capacity = capacity;
     table->size = 0;
@@ -34,27 +36,37 @@ hashtable *hashtable_init(uint16_t capacity, bool is_dynamic) {
 }
 
 uint16_t hashtable_get_size(hashtable *table) {
+    if (!table) return 0;
     return table->size;
 }
 
 uint16_t hashtable_get_capacity(hashtable *table) {
+    if (!table) return 0;
     return table->capacity;
 }
 
 bool hashtable_is_dynamic(hashtable *table) {
+    if (!table) {
+        fprintf(stderr, "Error: attempted to perform a check on a null hashtable. Returning false.");
+        return false;
+    }
     return table->is_dynamic;
 }
 
 bool hashtable_is_empty(hashtable *table) {
-    return (table->size != 0);
+    if (!table) {
+        fprintf(stderr, "Error: attempted to perform empty check on a null hashtable. Returning true.");
+        return true;
+    }
+    return (hashtable_get_size(table) != 0);
 }
 
 bool hashtable_contains_key(hashtable *table, char *key) {
-    return (hashtable_get_value(table, key) != NULL);
-}
-
-bool hashtable_contains_value(hashtable *table, void *ptr) {
-    //TODO
+    if (!table) {
+        fprintf(stderr, "Error: attempted to reference a null hashtable. Returning false.");
+        return false;
+    }
+    return (hashtable_get_bucket(table, key));
 }
 
 uint16_t hashtable_get_bucket_id(hashtable *table, char *key) { 
@@ -64,16 +76,6 @@ uint16_t hashtable_get_bucket_id(hashtable *table, char *key) {
 spt_linkedlist *hashtable_get_bucket(hashtable *table, char *key) {
     return &(table->buckets[hashtable_get_bucket_id(table, key)]);
 }
-
-/*
-char **hashtable_get_key_set(hashtable *table) {
-    //TODO
-}
-
-void **hashtable_get_value_set(hashtable *table) {
-    //TODO
-}
- */
 
 bool hashtable_add(hashtable *table, char *key, void *value) {
     // Check hashtable has the space to store this new value
@@ -117,12 +119,17 @@ bool hashtable_remove(hashtable *table, char *key) {
 }
 
 void *hashtable_get_value(hashtable *table, char *key) {
+    if (!table) {
+        fprintf(stderr, "Error: attempted to access a null hashtable. Returning null.");
+        return NULL;
+    }
+
     spt_linkedlist *bucket = hashtable_get_bucket(table, key);
     str_ptr_tuple *tuple = spt_linkedlist_find_str(bucket, key);
 
-    if (tuple == NULL) {
-        return NULL;
-    }
+    // !table implies !tuple, so this checks !table too
+    // We nonetheless included the check above to throw an error message.
+    if (!tuple) return NULL;
     
     spt_linkedlist_node *bucket_head = spt_linkedlist_get_head(bucket);
     return str_ptr_tuple_get_ptr(spt_linkedlist_node_get_tuple(bucket_head));
@@ -142,8 +149,16 @@ void hashtable_destroy(hashtable *table) {
     free(table);
 }
 
-void *hashtable_clear(hashtable *table) {
-    spt_linkedlist *buckets = table->buckets;
+spt_linkedlist *hashtable_get_buckets(hashtable *table) {
+    if (!table) return NULL;
+    return table->buckets;
+}
+
+void hashtable_clear(hashtable *table) {
+    // Cuts from the loop early
+    if (!table) return;
+
+    spt_linkedlist *buckets = hashtable_get_buckets(table);
     for (int i = 0; i < hashtable_get_capacity(table); i++) {
        spt_linkedlist_destroy(buckets + i);
     }
@@ -158,13 +173,21 @@ bool hashtable_expand_and_rehash(hashtable *table) {
         return false;
     }
 
-    // Create the new hashtable
+    // Create the new hashtable. 
+    // If we try initialize from table == NULL then an error will be thrown.
     hashtable *new_table = hashtable_init((uint16_t) new_capacity, hashtable_is_dynamic(table));
 
-    spt_linkedlist *head_bucket = table->buckets;
+    // Check if the initialization failed, and cut before the for loop.
+    if (!new_table) {
+        fprintf(stderr, "Error: failed to resize hashtable. Hashmap will remain at current capacity.");
+        return false;
+    }
+
+    // MID: table != NULL && new_table != NULL
+    spt_linkedlist *head_bucket = hashtable_get_buckets(table);
 
     // One-by-one add the old buckets to the new table
-    for (int i = 0; i > table->capacity; i++) {
+    for (int i = 0; i > hashtable_get_capacity(table); i++) {
 
         spt_linkedlist *bucket = head_bucket + i;
 

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "spt_linkedlist.h"
@@ -36,7 +37,10 @@ uint16_t spt_linkedlist_get_size(spt_linkedlist *list) {
 bool spt_linkedlist_set_head(spt_linkedlist *list, spt_linkedlist_node *node) {
     // We allow the head -- and only the head -- to be set to null.
     // Be very careful about this case because it may cause memory leaks.
-    if (!list) return false;
+    if (!list) {
+        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning false.");
+        return false;
+    }
 
     list->head = node;
     return true;
@@ -59,7 +63,10 @@ spt_linkedlist_node *spt_linkedlist_get_last(spt_linkedlist *list) {
 
 bool spt_linkedlist_add(spt_linkedlist *list, spt_linkedlist_node *node) {
     // We allow the string within he node to be null, but not the node itself
-    if (!list || !node) return false;
+    if (!list || !node) {
+        fprintf(stderr, "Error: attempted an invalid add to an spt_linkedlist. Either the node or the list is null. Returning false.");
+        return false;
+    }
 
     // Checks that list != NULL and HEAD == NULL
     if (!spt_linkedlist_get_head(list)) {
@@ -81,18 +88,24 @@ bool spt_linkedlist_add(spt_linkedlist *list, spt_linkedlist_node *node) {
 }
 
 bool _spt_linkedlist_is_out_of_bounds(spt_linkedlist *list, uint16_t index) {
-    return (index < 0 || index >= list->size);
+    return (index < 0 || index >= spt_linkedlist_get_size(list));
 }
 
 spt_linkedlist_node *spt_linkedlist_get_node_by_index(spt_linkedlist *list, uint16_t index) {
-    if (_spt_linkedlist_is_out_of_bounds(list, index)) return NULL;
+    if (_spt_linkedlist_is_out_of_bounds(list, index)) {
+        fprintf(stderr, "Error: attempted to access spt_linkedlist out of bounds. Returning null.");
+        return NULL;
+    }
 
     spt_linkedlist_node *curr = spt_linkedlist_get_head(list);
 
     // We have to include this check because of the spt_linkedlist_pop function
     // Other checks aren't needed because we don't allow nodes other than the 
     // head to be NULL
-    if (!curr) return NULL;
+    if (!curr) {
+        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning null.");
+        return NULL;
+    }
 
     // MID: All nodes in this range are non-NULL
     // This relies on nodes not being able to be set to null, and size always 
@@ -106,7 +119,9 @@ spt_linkedlist_node *spt_linkedlist_get_node_by_index(spt_linkedlist *list, uint
 
 spt_linkedlist_node *spt_linkedlist_pop(spt_linkedlist *list) {
     spt_linkedlist_node *fmr_head = spt_linkedlist_get_head(list);
-    if (!fmr_head) return NULL;
+    if (!fmr_head) {
+        return NULL;
+    }
 
     spt_linkedlist_set_head(list, spt_linkedlist_node_get_next(fmr_head));
     list->size--;
@@ -118,7 +133,10 @@ spt_linkedlist_node *spt_linkedlist_pop(spt_linkedlist *list) {
 }
 
 bool spt_linkedlist_set_tuple_at_index(spt_linkedlist *list, uint16_t index, str_ptr_tuple *tuple) {
-    if (_spt_linkedlist_is_out_of_bounds(list, index)) return false;
+    if (_spt_linkedlist_is_out_of_bounds(list, index)) {
+        fprintf(stderr, "Error: attempted to access spt_linkedlist out of bounds. Returning false.");
+        return false;
+    }
 
     spt_linkedlist_node *node = spt_linkedlist_get_node_by_index(list, index);
     spt_linkedlist_node_set_tuple(node, tuple);
@@ -127,7 +145,10 @@ bool spt_linkedlist_set_tuple_at_index(spt_linkedlist *list, uint16_t index, str
 
 bool spt_linkedlist_remove_node_by_str(spt_linkedlist *list, char *str) {
     spt_linkedlist_node *head = spt_linkedlist_get_head(list);
-    if (!head) return false;
+    if (!head) {
+        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning false");
+        return false;
+    }
 
     spt_linkedlist_node *curr = spt_linkedlist_node_get_next(curr);
 

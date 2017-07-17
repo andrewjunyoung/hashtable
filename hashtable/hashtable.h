@@ -1,9 +1,6 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdbool.h>
 
 #include "spt_linkedlist/spt_linkedlist.c"
@@ -86,20 +83,6 @@ bool hashtable_contains_key(hashtable *table, char *key);
  */
 bool hashtable_contains_value(hashtable *table, void *value);
 
-/* Returns an array containing all of the keys contained in the hashtable
- *
- * @param hashtable The hashtable to get keys from
- * @return          An array containing all the keys within the hashtable
- */
-void **hashtable_get_key_set(hashtable *table);
-
-/* Returns an array containing all of the values contained in the hashtable
- *
- * @param hashtable The hashtable to get values from
- * @return          An array containing all the values within the hashtable
- */
-void **hashtable_get_value_set(hashtable *table);
-
 /* Adds a key-value pair to a hashtable
  *
  * @param hashtable A pointer in memory to the hashtable to add the values to
@@ -150,7 +133,7 @@ void hashtable_destroy(hashtable *table);
  *
  * @param hashtable A pointer in memory to the hashtable to clear.
  */
-void *hashtable_clear(hashtable *table);
+void hashtable_clear(hashtable *table);
 
 bool hashtable_expand_and_rehash(hashtable *table);
 

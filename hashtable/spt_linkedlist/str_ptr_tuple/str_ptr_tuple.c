@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "str_ptr_tuple.h"
@@ -29,14 +30,20 @@ void *str_ptr_tuple_get_ptr(str_ptr_tuple *tuple) {
 }
 
 bool str_ptr_tuple_set_str(str_ptr_tuple *tuple, char *str) {
-    if (!tuple) return false;
+    if (!tuple) {
+        fprintf(stderr, "Error: attempted to set str in a null str_ptr_tuple. Returning false.");
+        return false;
+    }
 
     tuple->str = str;
     return true;
 }
 
 bool str_ptr_tuple_set_ptr(str_ptr_tuple *tuple, void *ptr) {
-    if (!tuple) return false;
+    if (!tuple) {
+        fprintf(stderr, "Error: attempted to set ptr in a null str_ptr_tuple. Returning false.");
+        return false;
+    }
 
     tuple->ptr = ptr;
     return true;
