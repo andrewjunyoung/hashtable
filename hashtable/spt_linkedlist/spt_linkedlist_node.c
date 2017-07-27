@@ -25,11 +25,13 @@ void spt_linkedlist_node_destroy_all(spt_linkedlist_node *node) {
     while (spt_linkedlist_node_has_next(curr)) {
         spt_linkedlist_node *new_next = curr->next;
 
+        fprintf(stderr, "Ll8 ");
         spt_linkedlist_node_destroy(curr);
 
         curr = new_next;
     }
 
+    fprintf(stderr, "L33 ");
     spt_linkedlist_node_destroy(curr);
 }
 
