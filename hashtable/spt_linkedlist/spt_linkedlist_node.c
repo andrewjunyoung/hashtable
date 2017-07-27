@@ -45,7 +45,7 @@ void *spt_linkedlist_node_get_tuple(spt_linkedlist_node *node) {
 
 bool spt_linkedlist_node_has_next(spt_linkedlist_node *node) {
     // This includes a null check on node
-    return !(spt_linkedlist_node_get_next(node));
+    return spt_linkedlist_node_get_next(node);
 }
 
 bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *next) {
