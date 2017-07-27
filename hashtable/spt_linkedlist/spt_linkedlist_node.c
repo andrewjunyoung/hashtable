@@ -23,11 +23,11 @@ void spt_linkedlist_node_destroy_all(spt_linkedlist_node *node) {
     // We use spt_linkedlist_node_has_next rather than (curr->next != NULL)
     // because it includes a check for the case that node == NULL
     while (spt_linkedlist_node_has_next(curr)) {
-        spt_linkedlist_node *next = curr->next;
+        spt_linkedlist_node *new_next = curr->next;
 
         spt_linkedlist_node_destroy(curr);
 
-        curr = next;
+        curr = new_next;
     }
 
     spt_linkedlist_node_destroy(curr);
@@ -48,12 +48,12 @@ bool spt_linkedlist_node_has_next(spt_linkedlist_node *node) {
     return spt_linkedlist_node_get_next(node);
 }
 
-bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *next) {
+bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *new_next) {
     if (!curr) {
         fprintf(stderr, "Error: attempted to set next in a null spt_linkedlist_node. Returning false.");
         return false;
     }
-    curr->next = next;
+    curr->next = new_next;
     return true;
 }
 
