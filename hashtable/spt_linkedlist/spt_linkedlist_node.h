@@ -60,7 +60,7 @@ bool spt_linkedlist_node_has_next(spt_linkedlist_node *node);
  *             param.
  * @return     True iff the next is successfully set
  */
-bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *next);
+bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *new_next);
 
 /* Sets the value of a specified linkedlist_node to the value specified as a 
  * parameter
