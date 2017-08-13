@@ -4,7 +4,7 @@
 
 #include "hashtable.h"
 
-void *hashtable_get_value(hashtable *table, char *key);
+void *hashtable_get_val(hashtable *table, char *key);
 
 unsigned long _hashtable_get_hash(char *str) {
     unsigned long hash = 5381;
@@ -25,7 +25,7 @@ hashtable *hashtable_init(uint16_t capacity, bool is_dynamic) {
         return NULL;
     }
 
-    hashtable* table = malloc(sizeof(table));
+    hashtable *table = malloc(sizeof(table));
 
     table->is_dynamic = is_dynamic;
     table->capacity = capacity;
@@ -77,8 +77,8 @@ spt_linkedlist *hashtable_get_bucket(hashtable *table, char *key) {
     return &(table->buckets[hashtable_get_bucket_id(table, key)]);
 }
 
-bool hashtable_add(hashtable *table, char *key, void *value) {
-    // Check hashtable has the space to store this new value
+bool hashtable_add(hashtable *table, char *key, void *val) {
+    // Check hashtable has the space to store this new val
     if (hashtable_get_size(table) >= hashtable_get_capacity(table)) {
         fprintf(stderr, "Attempting to add to a full hashtable. Aborting hashtable_add.");
         return false;
@@ -93,7 +93,7 @@ bool hashtable_add(hashtable *table, char *key, void *value) {
 
     spt_linkedlist* bucket = hashtable_get_bucket(table, key);
 
-    spt_linkedlist_node *node = spt_linkedlist_node_init(str_ptr_tuple_init(key, value));
+    spt_linkedlist_node *node = spt_linkedlist_node_init(str_ptr_tuple_init(key, val));
     bool is_success = spt_linkedlist_add(bucket, node);
 
     if (is_success) {
@@ -118,7 +118,7 @@ bool hashtable_remove(hashtable *table, char *key) {
     return spt_linkedlist_remove_node_by_str(bucket, key);
 }
 
-void *hashtable_get_value(hashtable *table, char *key) {
+void *hashtable_get_val(hashtable *table, char *key) {
     if (!table) {
         fprintf(stderr, "Error: attempted to access a null hashtable. Returning null.");
         return NULL;
