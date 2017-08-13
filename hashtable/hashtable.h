@@ -73,16 +73,6 @@ bool hashtable_is_empty(hashtable *table);
  */
 bool hashtable_contains_key(hashtable *table, char *key);
 
-/* Returns true iff the hashtable contains a key for which value is the
- * associated value
- *
- * @param hashtabel The hashtable to perform the check on
- * @param value     The value that is being checked for within the hashtable
- * @return          True iff the hashtable contains a key for which value is the
- *                  associated value
- */
-bool hashtable_contains_value(hashtable *table, void *value);
-
 /* Adds a key-value pair to a hashtable
  *
  * @param hashtable A pointer in memory to the hashtable to add the values to
@@ -137,12 +127,20 @@ void hashtable_clear(hashtable *table);
 
 bool hashtable_expand_and_rehash(hashtable *table);
 
+/* Returns the id of the bucket for which the input string is the key.
+ *
+ * @param table The hashtable to search for the bucket in
+ * @param str   The key of the bucket whose id we want to get
+ * @return      The id of the bucket for which str is the key
+ */
 uint16_t hashtable_get_bucket_id(hashtable *table, char *str);
 
+/* Returns the bucket for which the input string is the key.
+ *
+ * @param table The hashtable to search for the bucket in
+ * @param str   The key of the bucket we want to get
+ * @return      A pointer to the bucket for which str is the key
+ */
 spt_linkedlist *hashtable_get_bucket(hashtable *table, char *str);
-
-void hashtable_get_keys(hashtable *table, char **keys);
-
-void hashtable_get_values(hashtable *hashtable, char **values);
 
 #endif 
