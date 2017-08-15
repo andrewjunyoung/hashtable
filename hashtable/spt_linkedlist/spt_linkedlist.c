@@ -4,9 +4,6 @@
 
 #include "spt_linkedlist.h"
 
-// Note that checks on the nullity of the head are irrelevant in this code, but 
-// act as a safety mechanism for later alterations
-
 spt_linkedlist *spt_linkedlist_init(spt_linkedlist_node *node) {
     spt_linkedlist *list = malloc(sizeof(spt_linkedlist));
 
