@@ -21,7 +21,7 @@ unsigned long _hashtable_get_hash(char *str) {
 
 hashtable *hashtable_init(uint16_t capacity, bool is_dynamic) {
     if (capacity == 0) {
-        fprintf(stderr, "Error: Cannot initialize hashtable of capacity zero.");
+        err_init_and_handle(AERR_INVALID_INPUT, WARNING, __func__, "Attempted to initialize a hashtable of capacity zero", "Returning null");
         return NULL;
     }
 
@@ -47,7 +47,7 @@ uint16_t hashtable_get_capacity(hashtable *table) {
 
 bool hashtable_is_dynamic(hashtable *table) {
     if (!table) {
-        fprintf(stderr, "Error: attempted to perform a check on a null hashtable. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to perform a check on a null hashtable", "Returning false");
         return false;
     }
     return table->is_dynamic;
@@ -55,7 +55,7 @@ bool hashtable_is_dynamic(hashtable *table) {
 
 bool hashtable_is_empty(hashtable *table) {
     if (!table) {
-        fprintf(stderr, "Error: attempted to perform empty check on a null hashtable. Returning true.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to perform a check on a null hashtable", "Returning true");
         return true;
     }
     return (hashtable_get_size(table) != 0);
@@ -63,7 +63,7 @@ bool hashtable_is_empty(hashtable *table) {
 
 bool hashtable_contains_key(hashtable *table, char *key) {
     if (!table) {
-        fprintf(stderr, "Error: attempted to reference a null hashtable. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access a null hashtable", "Returning false");
         return false;
     }
     return (hashtable_get_bucket(table, key));
@@ -80,14 +80,14 @@ spt_linkedlist *hashtable_get_bucket(hashtable *table, char *key) {
 bool hashtable_add(hashtable *table, char *key, void *val) {
     // Check hashtable has the space to store this new val
     if (hashtable_get_size(table) >= hashtable_get_capacity(table)) {
-        fprintf(stderr, "Attempting to add to a full hashtable. Aborting hashtable_add.");
+        err_init_and_handle(AERR_MAX_CAPACITY, WARNING, __func__, "Attempted to add to a full hashtable", "Aborting add; Returning false");
         return false;
     }
 
     // TODO Why do we only have this for NULL and not all strings?
     // Check for NULL case -- we only permit one NULL key.
     if (key == NULL && hashtable_contains_key(table, NULL)) {
-        fprintf(stderr, "Attempting to add multiple NULL keys to a hashtable. Aborting hashtable_add.");
+        err_init_and_handle(AERR_INVALID_INPUT, WARNING, __func__, "Attempted to add multiple null keys to a hashtable", "Aborting add; Returning false");
         return false;
     }
 
@@ -120,7 +120,7 @@ bool hashtable_remove(hashtable *table, char *key) {
 
 void *hashtable_get_val(hashtable *table, char *key) {
     if (!table) {
-        fprintf(stderr, "Error: attempted to access a null hashtable. Returning null.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access a null hashtable", "Returning null");
         return NULL;
     }
 
@@ -169,7 +169,7 @@ bool hashtable_expand_and_rehash(hashtable *table) {
 
     // Check that the new capacity is below our max permitted capacity
     if (new_capacity > UINT16_MAX) {
-        fprintf(stderr, "Error: attempted to resize hashtable past the maximum capacity. Hashmap will remain at current capacity.");
+        err_init_and_handle(AERR_MAX_CAPACITY, WARNING, __func__, "Attempted to resize hashtable beyond the max capacity.", "Hashmap will remain at current capacity; Returning false");
         return false;
     }
 
@@ -179,7 +179,7 @@ bool hashtable_expand_and_rehash(hashtable *table) {
 
     // Check if the initialization failed, and cut before the for loop.
     if (!new_table) {
-        fprintf(stderr, "Error: failed to resize hashtable. Hashmap will remain at current capacity.");
+        err_init_and_handle(AERR_FAILURE, WARNING, __func__, "Failed to resize hashtable.", "Hashmap will remain at current capacity; Returning false");
         return false;
     }
 
