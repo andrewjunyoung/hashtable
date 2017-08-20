@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "spt_linkedlist_node.h"
 
 spt_linkedlist_node *spt_linkedlist_node_init(str_ptr_tuple *tuple) {
@@ -25,13 +24,11 @@ void spt_linkedlist_node_destroy_all(spt_linkedlist_node *node) {
     while (spt_linkedlist_node_has_next(curr)) {
         spt_linkedlist_node *new_next = curr->next;
 
-        fprintf(stderr, "Ll8 ");
         spt_linkedlist_node_destroy(curr);
 
         curr = new_next;
     }
 
-    fprintf(stderr, "L33 ");
     spt_linkedlist_node_destroy(curr);
 }
 
@@ -52,7 +49,7 @@ bool spt_linkedlist_node_has_next(spt_linkedlist_node *node) {
 
 bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node *new_next) {
     if (!curr) {
-        fprintf(stderr, "Error: attempted to set next in a null spt_linkedlist_node. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to set next in a null spt_linkedlist_node", "Returning false");
         return false;
     }
     curr->next = new_next;
@@ -61,7 +58,7 @@ bool spt_linkedlist_node_set_next(spt_linkedlist_node *curr, spt_linkedlist_node
 
 bool spt_linkedlist_node_set_tuple(spt_linkedlist_node *node, str_ptr_tuple *tuple) {
     if (!node) {
-        fprintf(stderr, "Error: attempted to set tuple in a null spt_linkedlist_node. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to set tuple in a null spt_linkedlist_node", "Returning false");
         return false;
     }
     node->tuple = tuple;

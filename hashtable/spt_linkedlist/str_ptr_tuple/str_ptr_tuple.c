@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
+#include "../../../c-rash_test/err/err.c"
 #include "str_ptr_tuple.h"
 
 str_ptr_tuple *str_ptr_tuple_init(char *str, void *ptr) {
@@ -31,7 +31,7 @@ void *str_ptr_tuple_get_ptr(str_ptr_tuple *tuple) {
 
 bool str_ptr_tuple_set_str(str_ptr_tuple *tuple, char *str) {
     if (!tuple) {
-        fprintf(stderr, "Error: attempted to set str in a null str_ptr_tuple. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to set str in a null str_ptr_tuple", "Returning false");
         return false;
     }
 
@@ -41,7 +41,7 @@ bool str_ptr_tuple_set_str(str_ptr_tuple *tuple, char *str) {
 
 bool str_ptr_tuple_set_ptr(str_ptr_tuple *tuple, void *ptr) {
     if (!tuple) {
-        fprintf(stderr, "Error: attempted to set ptr in a null str_ptr_tuple. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to set ptr in a null str_ptr_tuple", "Returning false");
         return false;
     }
 

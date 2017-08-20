@@ -1,14 +1,31 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "spt_linkedlist.h"
+
+// Note that checks on the nullity of the head are irrelevant in this code, but 
+// act as a safety mechanism for later alterations
+
+uint16_t _spt_linkedlist_calc_size(spt_linkedlist *list) {
+    if (!list) return 0;
+
+    uint16_t len = 0;
+    spt_linkedlist_node *curr = spt_linkedlist_get_head(list);
+
+    // Go through the list until one of the items
+    while (curr) {
+        len++;
+        curr = spt_linkedlist_node_get_next(curr);
+   }
+
+    return len;
+}
 
 spt_linkedlist *spt_linkedlist_init(spt_linkedlist_node *node) {
     spt_linkedlist *list = malloc(sizeof(spt_linkedlist));
 
     list->head = node;
-    list->size = 0;
+    list->size = _spt_linkedlist_calc_size(list);
 
     return list;
 }
@@ -35,11 +52,12 @@ bool spt_linkedlist_set_head(spt_linkedlist *list, spt_linkedlist_node *node) {
     // We allow the head -- and only the head -- to be set to null.
     // Be very careful about this case because it may cause memory leaks.
     if (!list) {
-        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access an empty spt_linkedlist", "Returning false");
         return false;
     }
 
     list->head = node;
+    list->size = _spt_linkedlist_calc_size(list);
     return true;
 }
 
@@ -61,7 +79,7 @@ spt_linkedlist_node *spt_linkedlist_get_last(spt_linkedlist *list) {
 bool spt_linkedlist_add(spt_linkedlist *list, spt_linkedlist_node *node) {
     // We allow the string within he node to be null, but not the node itself
     if (!list || !node) {
-        fprintf(stderr, "Error: attempted an invalid add to an spt_linkedlist. Either the node or the list is null. Returning false.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted an invalid add to an spt_linkedlist", "Returning false");
         return false;
     }
 
@@ -84,13 +102,16 @@ bool spt_linkedlist_add(spt_linkedlist *list, spt_linkedlist_node *node) {
     return true;
 }
 
-bool _spt_linkedlist_is_out_of_bounds(spt_linkedlist *list, uint16_t index) {
-    return (index < 0 || index >= spt_linkedlist_get_size(list));
+bool _spt_linkedlist_is_out_of_bounds(spt_linkedlist *list, uint16_t index, bool strictly_in_bounds) {
+    if (strictly_in_bounds) {
+        return (index < 0 || index >= spt_linkedlist_get_size(list));
+    }
+    return (index < 0 || index > spt_linkedlist_get_size(list));
 }
 
 spt_linkedlist_node *spt_linkedlist_get_node_by_index(spt_linkedlist *list, uint16_t index) {
-    if (_spt_linkedlist_is_out_of_bounds(list, index)) {
-        fprintf(stderr, "Error: attempted to access spt_linkedlist out of bounds. Returning null.");
+    if (_spt_linkedlist_is_out_of_bounds(list, index, true)) {
+        err_init_and_handle(AERR_OUT_OF_BOUNDS, WARNING, __func__, "Attempted to access an spt_linkedlist out of bounds", "Returning null");
         return NULL;
     }
 
@@ -100,7 +121,7 @@ spt_linkedlist_node *spt_linkedlist_get_node_by_index(spt_linkedlist *list, uint
     // Other checks aren't needed because we don't allow nodes other than the 
     // head to be NULL
     if (!curr) {
-        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning null.");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access an empty spt_linkedlist", "Returning null");
         return NULL;
     }
 
@@ -130,8 +151,8 @@ spt_linkedlist_node *spt_linkedlist_pop(spt_linkedlist *list) {
 }
 
 bool spt_linkedlist_set_tuple_at_index(spt_linkedlist *list, uint16_t index, str_ptr_tuple *tuple) {
-    if (_spt_linkedlist_is_out_of_bounds(list, index)) {
-        fprintf(stderr, "Error: attempted to access spt_linkedlist out of bounds. Returning false.");
+    if (_spt_linkedlist_is_out_of_bounds(list, index, true)) {
+        err_init_and_handle(AERR_OUT_OF_BOUNDS, WARNING, __func__, "Attempted to access an spt_linkedlist out of bounds", "Returning false");
         return false;
     }
 
@@ -143,7 +164,7 @@ bool spt_linkedlist_set_tuple_at_index(spt_linkedlist *list, uint16_t index, str
 bool spt_linkedlist_remove_node_by_str(spt_linkedlist *list, char *str) {
     spt_linkedlist_node *head = spt_linkedlist_get_head(list);
     if (!head) {
-        fprintf(stderr, "Error: attempted to access an empty spt_linkedlist. Returning false");
+        err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access an empty spt_linkedlist", "Returning false");
         return false;
     }
 
