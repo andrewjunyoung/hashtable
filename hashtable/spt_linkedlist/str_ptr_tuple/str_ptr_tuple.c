@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../../c-rash_test/err/err.c"
+#include "../../../crash_test/err/err.c"
 #include "str_ptr_tuple.h"
 
 str_ptr_tuple *str_ptr_tuple_init(char *str, void *ptr) {

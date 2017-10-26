@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 #include "spt_linkedlist_node.h"
 
 spt_linkedlist_node *spt_linkedlist_node_init(str_ptr_tuple *tuple) {
