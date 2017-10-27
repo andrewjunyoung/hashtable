@@ -1,0 +1,3 @@
+[submodule "crash_test"]
+	path = crash_test
+	url = https://github.com/andrewjunyoung/crash_test.git
