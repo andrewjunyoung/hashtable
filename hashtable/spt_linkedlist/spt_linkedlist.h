@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #include "spt_linkedlist_node.c"
 
 /* A struct storing an spt_linkedlist made up of one spt_linkedlist_node that is
