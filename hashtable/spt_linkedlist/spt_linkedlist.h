@@ -1,3 +1,6 @@
+#ifndef SPT_LINKEDLIST_H
+#define SPT_LINKEDLIST_H
+
 #include <stdint.h>
 
 #include "spt_linkedlist_node.c"
@@ -110,3 +113,5 @@ bool spt_linkedlist_add(spt_linkedlist *list, spt_linkedlist_node *node);
  *             param. If no match found, then return NULL
  */
 str_ptr_tuple *spt_linkedlist_find_str(spt_linkedlist *list, char *str);
+
+#endif
