@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "../../../crash_test/err/err.c"
-#include "str_ptr_tuple.h"
+#include "str_ptr_tuple_struct.h"
 
 str_ptr_tuple *str_ptr_tuple_init(char *str, void *ptr) {
     str_ptr_tuple *tuple = malloc(sizeof(str_ptr_tuple));

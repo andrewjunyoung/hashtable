@@ -1,12 +1,7 @@
 #ifndef STR_PTR_TUPLE_H
 #define STR_PTR_TUPLE_H
 
-#include <stdbool.h>
-
-typedef struct str_ptr_tuple {
-    char *str;
-    void *ptr;
-} str_ptr_tuple;
+#include "str_ptr_tuple.c"
 
 /* Creates a new str_ptr_tuple with str and ptr as specified as params
  *

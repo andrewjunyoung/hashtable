@@ -1,10 +1,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "spt_linkedlist.h"
+#include "spt_linkedlist_struct.h"
 
 // Note that checks on the nullity of the head are irrelevant in this code, but 
 // act as a safety mechanism for later alterations
+
+spt_linkedlist_node *spt_linkedlist_get_head(spt_linkedlist *list) {
+    if (!list) return NULL;
+    return list->head;
+}
 
 uint16_t _spt_linkedlist_calc_size(spt_linkedlist *list) {
     if (!list) return 0;
@@ -36,11 +41,6 @@ void spt_linkedlist_destroy(spt_linkedlist *list) {
     spt_linkedlist_node_destroy_all(head);
 
     free(list);
-}
-
-spt_linkedlist_node *spt_linkedlist_get_head(spt_linkedlist *list) {
-    if (!list) return NULL;
-    return list->head;
 }
 
 uint16_t spt_linkedlist_get_size(spt_linkedlist *list) {
