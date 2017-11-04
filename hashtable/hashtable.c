@@ -70,7 +70,8 @@ bool hashtable_contains_key(hashtable *table, char *key) {
         err_init_and_handle(AERR_NULL_PTR, WARNING, __func__, "Attempted to access a null hashtable", "Returning false");
         return false;
     }
-    return (hashtable_get_bucket(table, key));
+    spt_linkedlist_node *head = spt_linkedlist_get_head(hashtable_get_bucket(table, key));
+    return head;
 }
 
 spt_linkedlist *hashtable_get_buckets(hashtable *table) {
