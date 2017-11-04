@@ -1,18 +1,7 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-#include <stdbool.h>
-
-#include "spt_linkedlist/spt_linkedlist.c"
-
-#define MAX_STRING_LEN 8
-
-typedef struct hashtable {
-    uint16_t capacity;
-    uint16_t size;
-    spt_linkedlist* buckets;
-    bool is_dynamic;
-} hashtable;
+#include "hashtable.c"
 
 // Names for these methods are largely based off the Java 7 implementation of 
 // HashMap and its associated methods. hashtable_destroy is custom-named for
