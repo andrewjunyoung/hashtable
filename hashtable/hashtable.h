@@ -1,6 +1,8 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+#include "hashtable_struct.h"
+
 // Names for these methods are largely based off the Java 7 implementation of 
 // HashMap and its associated methods. hashtable_destroy is custom-named for
 // clarity about its function
