@@ -1,8 +1,6 @@
 #ifndef SPT_LINKEDLIST_H
 #define SPT_LINKEDLIST_H
 
-#include "spt_linkedlist.c"
-
 /* Creates an spt_linkedlist in memory and returns a pointer to it
  *
  * @param node The first node in the new spt_linkedlist

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "spt_linkedlist_node.c"
+#include "spt_linkedlist_node.h"
 
 /* A struct storing an spt_linkedlist made up of one spt_linkedlist_node that is
  * linked to other spt_linkedlist_nodes

@@ -2,7 +2,6 @@
 #define SPT_LINKEDLIST_NODE_H
 
 #include <stdbool.h>
-#include "str_ptr_tuple/str_ptr_tuple.c"
 
 typedef struct spt_linkedlist_node spt_linkedlist_node;
 
