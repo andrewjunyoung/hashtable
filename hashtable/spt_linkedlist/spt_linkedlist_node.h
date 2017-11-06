@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "spt_linkedlist_struct.h"
+
 typedef struct spt_linkedlist_node spt_linkedlist_node;
 
 struct spt_linkedlist_node {
