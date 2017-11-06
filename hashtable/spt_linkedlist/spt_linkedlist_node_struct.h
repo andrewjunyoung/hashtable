@@ -5,9 +5,9 @@
 
 typedef struct spt_linkedlist_node spt_linkedlist_node;
 
-struct spt_linkedlist_node {
+typedef struct spt_linkedlist_node {
     spt_linkedlist_node *next;
     str_ptr_tuple *tuple;
-};
+} spt_linkedlist_node;
 
 #endif 
