@@ -1,6 +1,8 @@
 #ifndef STR_PTR_TUPLE_H
 #define STR_PTR_TUPLE_H
 
+#include "str_ptr_tuple_struct.h"
+
 /* Creates a new str_ptr_tuple with str and ptr as specified as params
  *
  * @param str   The str to be held in the str_ptr_tuple
